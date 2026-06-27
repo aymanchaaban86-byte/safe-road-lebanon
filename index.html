@@ -34,7 +34,7 @@
     <div class="min-h-screen flex flex-col">
         <!-- Header -->
         <header class="bg-gradient-to-r from-slate-900 to-slate-800 border-b border-slate-700 sticky top-0 z-40 p-4">
-            <div class="flex justify-between items-center">
+            <div class="flex justify-between items-center gap-2">
                 <div class="flex items-center gap-2">
                     <div class="w-10 h-10 bg-red-600 rounded-lg flex items-center justify-center text-lg">🚗</div>
                     <div>
@@ -42,7 +42,10 @@
                         <p class="text-gray-400 text-xs">طرابلس 🎙️</p>
                     </div>
                 </div>
-                <button onclick="showReport()" class="btn-primary text-white px-4 py-2 rounded-lg font-bold text-sm">➕ بلاغ</button>
+                <div class="flex gap-2">
+                    <button onclick="showAdmin()" class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-2 rounded-lg font-bold text-sm btn">🔐 Admin</button>
+                    <button onclick="showReport()" class="btn-primary text-white px-3 py-2 rounded-lg font-bold text-sm">➕ بلاغ</button>
+                </div>
             </div>
         </header>
 
@@ -81,6 +84,23 @@
                 <div id="map"></div>
             </div>
         </main>
+    </div>
+
+    <!-- Admin Login Modal -->
+    <div id="adminLoginModal" class="hidden fixed inset-0 bg-black/70 flex items-center justify-center p-4 modal" style="z-index: 999;">
+        <div class="bg-slate-800 rounded-xl w-full max-w-sm border border-slate-700">
+            <div class="bg-slate-900 p-4 border-b border-slate-700 flex justify-between items-center">
+                <h2 class="text-xl font-bold">🔐 الإدارة</h2>
+                <button onclick="closeAdminLogin()" class="text-gray-400 hover:text-white text-xl">✕</button>
+            </div>
+            <div class="p-4 space-y-4">
+                <input type="password" id="adminLoginPass" placeholder="كلمة المرور" class="w-full bg-slate-700 border border-slate-600 rounded-lg p-3 text-white" onkeypress="if(event.key==='Enter') openAdminPanel()" />
+                <div class="flex gap-2">
+                    <button onclick="closeAdminLogin()" class="flex-1 bg-slate-700 hover:bg-slate-600 text-white px-4 py-2 rounded-lg font-bold">إلغاء</button>
+                    <button onclick="openAdminPanel()" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-bold">دخول</button>
+                </div>
+            </div>
+        </div>
     </div>
 
     <!-- Report Modal -->
@@ -433,13 +453,33 @@
             document.getElementById('detailModal').classList.add('hidden');
         }
 
+        // Admin Functions
+        function showAdmin() {
+            document.getElementById('adminLoginModal').classList.remove('hidden');
+            document.getElementById('adminLoginPass').focus();
+        }
+
+        function closeAdminLogin() {
+            document.getElementById('adminLoginModal').classList.add('hidden');
+            document.getElementById('adminLoginPass').value = '';
+        }
+
+        function openAdminPanel() {
+            const pass = document.getElementById('adminLoginPass').value;
+            const storedPass = localStorage.getItem('adminPassword') || 'SafeRoad2024';
+            
+            if (pass === storedPass) {
+                window.location.href = 'admin_mobile.html';
+            } else {
+                alert('❌ كلمة المرور خاطئة');
+                document.getElementById('adminLoginPass').value = '';
+            }
+        }
+
         // Admin Access
         document.addEventListener('keydown', (e) => {
             if (e.ctrlKey && e.shiftKey && e.key === 'A') {
-                const pass = prompt('كلمة المرور:');
-                if (pass === 'SafeRoad2024') {
-                    window.location.href = 'admin_simple.html';
-                }
+                showAdmin();
             }
         });
 
