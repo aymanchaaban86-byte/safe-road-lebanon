@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Safe Road Admin Ayman Chaaban 2026 </title>
+    <title>Safe Road Admin</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Almarai:wght@300;400;700;800&display=swap" rel="stylesheet">
     <style>
@@ -70,7 +70,7 @@
     </div>
 
     <!-- Settings Modal -->
-    <div id="settingsModal" class="hidden fixed inset-0 bg-black/70 flex items-center justify-center p-4 z-50">
+    <div id="settingsModal" class="hidden fixed inset-0 bg-black/70 flex items-center justify-center p-4" style="z-index: 999;">
         <div class="bg-slate-800 rounded-xl w-full max-w-sm border border-slate-700">
             <div class="bg-slate-900 p-4 border-b border-slate-700">
                 <h2 class="text-xl font-bold">⚙️ الإعدادات</h2>
@@ -200,14 +200,16 @@
                 b.confirmed = true;
                 localStorage.setItem('barriers', JSON.stringify(barriers));
                 updateUI();
+                alert('✅ تم التأكيد');
             }
         }
 
         function remove(id) {
-            if (confirm('حذف؟')) {
+            if (confirm('حذف هذا البلاغ؟')) {
                 barriers = barriers.filter(b => b.id !== id);
                 localStorage.setItem('barriers', JSON.stringify(barriers));
                 updateUI();
+                alert('✅ تم الحذف');
             }
         }
 
@@ -233,7 +235,7 @@
         function changePassword() {
             const current = document.getElementById('currentPass').value;
             const newPass = document.getElementById('newPass').value;
-            const confirm = document.getElementById('confirmPass').value;
+            const confirmVal = document.getElementById('confirmPass').value;
 
             const storedPass = localStorage.getItem('adminPassword') || defaultPassword;
             
@@ -242,7 +244,7 @@
                 return;
             }
 
-            if (newPass !== confirm) {
+            if (newPass !== confirmVal) {
                 alert('❌ الكلمات الجديدة غير متطابقة');
                 return;
             }
@@ -259,7 +261,7 @@
 
         // Auto-load on start
         window.addEventListener('DOMContentLoaded', () => {
-            // Check if already logged in (for development)
+            // Ready
         });
     </script>
 </body>
